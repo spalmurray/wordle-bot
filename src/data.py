@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, List
 from pymongo.mongo_client import MongoClient
 
 
