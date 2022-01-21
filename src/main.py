@@ -26,8 +26,8 @@ async def on_message(message):
     if message.content == "!wb me":
         stats = database.get_player_stats(message.author.id)
         player = message.author.nick if message.author.nick is not None else message.author.name
-        stats_string = f"{player}'s average number of guesses is {stats[0]}. They've played {stats[1]} games and won " \
-                       f"{stats[2]} games, making their win rate {round(stats[3] * 100, 2)}%."
+        stats_string = f"{player}'s average number of guesses is {round(stats[0], 4)}. They've played {stats[1]} " \
+                       f"games and won {stats[2]} games, making their win rate {round(stats[3] * 100, 4)}%."
         await message.channel.send(stats_string)
 
     if message.content == "!wb average":
@@ -99,7 +99,7 @@ def rankings_by_average(message, n: int) -> str:
     scoreboard = "Rankings by average number of guesses:"
     i = 0
     while i < n and i != len(scores):
-        scoreboard += f"\n{i + 1}. {scores[i][0]} ({scores[i][1][0]})"
+        scoreboard += f"\n{i + 1}. {scores[i][0]} ({round(scores[i][1][0], 4)})"
         i += 1
 
     return scoreboard
@@ -122,7 +122,7 @@ def rankings_by_win_rate(message, n: int) -> str:
     scoreboard = "Rankings by win rate:"
     i = 0
     while i < n and i != len(scores):
-        scoreboard += f"\n{i + 1}. {scores[i][0]} ({round(scores[i][1][3] * 100, 2)}%)"
+        scoreboard += f"\n{i + 1}. {scores[i][0]} ({round(scores[i][1][3] * 100, 4)}%)"
         i += 1
 
     return scoreboard
