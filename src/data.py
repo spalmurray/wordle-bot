@@ -37,7 +37,7 @@ class Client:
                 "win_rate": 0
             }
 
-        player["scores"][str(wordle)] = score
+        player["scores"][wordle] = score
         player["count"] += 1
         player["win_count"] = player["win_count"] if score == 7 else player["win_count"] + 1
         player["average"] = player["average"] + (score - player["average"]) / (player["count"])
