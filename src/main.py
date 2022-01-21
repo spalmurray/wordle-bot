@@ -17,6 +17,9 @@ async def on_message(message):
     if message.content.startswith("Wordle "):
         await message.channel.send('nice one mate')
 
+    if message.content.startswith("!helper"):
+        await message.channel.send('https://www.spalmurray.com/wordle-helper')
+
 
 if __name__ == "__main__":
     config = configuration.Config()
