@@ -57,3 +57,10 @@ class Client:
             return 0.0, 0, 0, 0
 
         return player["average"], player["count"], player["win_count"], player["win_rate"]
+
+    def delete_player(self, pid: int) -> bool:
+        """Return True iff the player with pid was successfully deleted."""
+        result = self.db.players.delete_one({"_id": pid})
+        if result.deleted_count != 0:
+            return True
+        return False

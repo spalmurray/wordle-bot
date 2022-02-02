@@ -39,6 +39,14 @@ async def on_message(message):
     if message.content == "!wb games":
         await message.channel.send(rankings_by_games_played(message, 10))
 
+    if message.content == "!wb deletemydata":
+        if database.delete_player(message.author.id):
+            await message.channel.send(
+                f"{message.author.nick if message.author.nick is not None else message.author.name}'s "
+                f"data has been deleted.")
+        else:
+            await message.channel.send("I tried to delete your data, but I couldn't find any data for you!")
+
     if message.content == "!wb helper":
         await message.channel.send('https://www.spalmurray.com/wordle-helper')
 
@@ -48,7 +56,7 @@ async def on_message(message):
                       "`!wb average` to see server rankings by average number of guesses\n" \
                       "`!wb rate` to see server rankings by win rate\n" \
                       "`!wb games` to see server rankings by games played\n" \
-                      "`!wb helper` for a link to wordle-helper"
+                      "`!wb deletemydata` to remove all your scores from wordle-bot (warning: this is not reversible!)"
         await message.channel.send(help_string)
 
     if re.match(r"Wordle [0-9]+ [1-6|X]/6", message.content) is not None:
