@@ -5,6 +5,7 @@ import re
 
 intents = discord.Intents.default()
 intents.members = True
+intents.messages = True
 client = discord.Client(intents=intents)
 
 database = data.Client()
