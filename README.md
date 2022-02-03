@@ -12,7 +12,7 @@ Bot commands are as follows:
 - `!wb average` to see server rankings by average number of guesses
 - `!wb rate` to see server rankings by win rate
 - `!wb games` to see server rankings by games played
-- `!wb helper` for a link to wordle-helper
+- `!wb deletemydata` to remove all your scores from wordle-bot (warning: this is not reversible!)
 
 ---
 
