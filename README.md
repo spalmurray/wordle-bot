@@ -27,21 +27,26 @@ Bot commands are as follows:
 
 ### Prereqs
 
-- Python 3
+- Python 3 and PIP
 - MongoDB
 
-### Pre-Setup
+### Setup
 
-1. Register an applicaiton in the Discord Developer portal.
-2. Create a bot within the new application. On the bot page:
+1. Clone this repo!
+2. Install the "discord" and the "pymongo" packages if you don't already have them.
+   1. pip install discord
+   2. pip install pymongo
+3. Start the bot server the first time by running "python src/main.py" from the command line in order to generate the config.ini file. Then stop it to configure.
+4. Register an application in the Discord Developer portal at https://discord.com/developers.
+5. Create a bot within the new application. On the bot page:
    1. Give the bot a name. This will be displayed in the users list on the right in your Discord server.
    2. Enable the "Server Members" intent and the "Message Content" intent. This will allow the bot to access people and messages to keep score.
    3. Click the copy button in the token area of the Build-a-Bot section toward the top.
    4. Paste this token in the config.ini file. This is how the bot will authenticate with Discord when it runs.
-3. Generate the OAuth URL for adding the bot to a server.
+6. Generate the OAuth URL for adding the bot to a server.
    1. In the application page, click on OAuth2, then on URL Generator in the left-hand navigation.
    2. Check the "bot" box.
    3. Check "Send Messages" and "Read Message History" in the section that appears below.
    4. Copy the Generated URL and browse to it to authorize the bot in your Discord server. You'll choose the server and confirm the permissions on this page.
-4. Start the bot server by running "python main.py" from the command line.
-5. In your Discord server, type "!wb" in some text channel to confirm that the bot is responding.
+7. Start the bot server again with the config.ini file populated by running "python src/main.py" from the command line.
+8. In your Discord server, type "!wb" in some text channel to confirm that the bot is responding.
