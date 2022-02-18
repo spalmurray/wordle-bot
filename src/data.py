@@ -23,13 +23,12 @@ class Client:
         self.subwaydle_db = self.mongo.subwaydle
 
     def get_db_by_game_abbreviation(self, game_abbreviation):
-        match game_abbreviation:
-            case "wb":
-                return self.wordle_db
-            case "wlb":
-                return self.worldle_db
-            case "sb":
-                return self.subwaydle_db
+        if game_abbreviation == "wb":
+            return self.wordle_db
+        elif game_abbreviation == "wlb":
+            return self.worldle_db
+        elif game_abbreviation == "sb":
+            return self.subwaydle_db
 
     def add_score(self, game_abbreviation: str, pid: int, wordle: str, score: int) -> bool:
         db = self.get_db_by_game_abbreviation(game_abbreviation)
