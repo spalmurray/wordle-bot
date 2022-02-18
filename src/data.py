@@ -72,13 +72,21 @@ class Client:
         if player is None:
             return 0
 
-        games = list(player['scores'])
-        games.sort(reverse=True)
-        print(games)
+        scores = player['scores']
+        wins = []
+        print(scores)
+        # remove scores that are not wins
+        for game in scores:
+            if scores[game] != 7:
+                wins.append(int(game))
+
+        # sort these wins and return current streak
+        wins.sort(reverse=True)
+        print(wins)
         i = 1
-        previous = int(games[0])
-        while i != len(games) and int(games[i]) == int(previous - 1):
-            previous = int(games[i])
+        previous = int(wins[0])
+        while i != len(wins) and int(wins[i]) == int(previous - 1):
+            previous = int(wins[i])
             i += 1
         return i
 
@@ -89,17 +97,25 @@ class Client:
         if player is None:
             return 0
 
-        games = list(player['scores'])
-        games.sort(reverse=True)
+        scores = player['scores']
+        wins = []
+        print(scores)
+        # remove scores that are not wins
+        for game in scores:
+            if scores[game] != 7:
+                wins.append(int(game))
+
+        # sort these wins and return max streak
+        wins.sort(reverse=True)
         max_streak = 0
         i = 0
-        while i != len(games):
+        while i != len(wins):
             curr_streak = 1
-            previous = int(games[i])
+            previous = int(wins[i])
             i += 1
-            while i != len(games) and int(games[i]) == (previous - 1):
+            while i != len(wins) and int(wins[i]) == (previous - 1):
                 curr_streak += 1
-                previous = int(games[i])
+                previous = int(wins[i])
                 i += 1
             max_streak = (curr_streak if curr_streak > max_streak else max_streak)
         return max_streak
