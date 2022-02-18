@@ -18,7 +18,10 @@ async def on_ready():
 
 
 @client.event
-async def on_message(message):
+async def on_message(message: discord.Message):
+    if isTest and not message.channel.name == "wordle-test":
+        return
+
     if message.author == client.user:
         return
 
@@ -64,7 +67,9 @@ async def process_message(game_abbreviation, game_name, game_regex_string, messa
                       f"`!{game_abbreviation} average` to see server rankings by average number of guesses\n" \
                       f"`!{game_abbreviation} rate` to see server rankings by win rate\n" \
                       f"`!{game_abbreviation} games` to see server rankings by games played\n" \
-                      f"`!{game_abbreviation} deletemydata` to remove all your scores from wordle-bot (warning: this is not reversible!)"
+                      f"`!{game_abbreviation} deletemydata` to remove all your scores from wordle-bot (warning: this is not reversible!)\n" \
+                      f"I support multiple games now! Try the above commands with `!wb` (:book: Wordle), `!wlb` (:earth_americas: Worldle), " \
+                      f"`!sb` (:metro: Subwaydle), and `!tb` (:notes: Taylordle)."
         await message.channel.send(help_string)
 
     game_regex = re.compile(game_regex_string)
@@ -179,10 +184,14 @@ def rankings_by_games_played(message, game_abbreviation: str, n: int) -> str:
 
 
 if __name__ == "__main__":
+    global isTest
+
     config = configuration.Config()
 
     if len(sys.argv) > 1 and sys.argv[1] == "--test":
+        isTest = True
         client.run(config.testtoken)
 
     else:
+        isTest = False
         client.run(config.token)
