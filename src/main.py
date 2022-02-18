@@ -32,11 +32,7 @@ async def on_message(message):
 
 async def process_message(game_abbreviation, game_name, game_regex_string, message):
     if message.content == f"!{game_abbreviation} me":
-        stats = database.get_player_stats(game_abbreviation, message.author.id)
-        player = message.author.nick if message.author.nick is not None else message.author.name
-        stats_string = f"For **{game_name}**, {player}'s average number of guesses is **{round(stats[0], 4)}**. " \
-                       f"They've played **{stats[1]}** games and won **{stats[2]}** games, making their win rate " \
-                       f"**{round(stats[3] * 100, 4)}%**."
+        stats_string = get_stats_string(game_abbreviation, game_name, message)
         await message.channel.send(stats_string)
 
     if message.content == f"!{game_abbreviation} average":
@@ -84,9 +80,7 @@ async def process_message(game_abbreviation, game_name, game_regex_string, messa
 
         if not result:
             await message.channel.send(f"You've already submitted a score for this {game_name}.")
-            return
-
-        if score == 1:
+        elif score == 1:
             await message.channel.send("Uh... you should probably go buy a lottery ticket...")
         elif score == 2:
             await message.channel.send("Wow! That's impressive!")
@@ -100,6 +94,17 @@ async def process_message(game_abbreviation, game_name, game_regex_string, messa
             await message.channel.send("Cutting it a little close there...")
         else:
             await message.channel.send("I will pretend like I didn't see that one...")
+
+        await message.channel.send(get_stats_string(game_abbreviation, game_name, message))
+
+
+def get_stats_string(game_abbreviation, game_name, message):
+    stats = database.get_player_stats(game_abbreviation, message.author.id)
+    player = message.author.nick if message.author.nick is not None else message.author.name
+    stats_string = f"For {game_name}:\n**{player}**: **{stats[2]}** wins out of **{stats[1]}** games played " \
+        f" (**{round(stats[3] * 100, 4)}%**), averaging **{round(stats[0], 4)}** guesses."
+
+    return stats_string
 
 
 def rankings_by_average(message, game_abbreviation: str, n: int) -> str:
