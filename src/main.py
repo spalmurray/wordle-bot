@@ -28,7 +28,8 @@ async def on_message(message):
         stats = database.get_player_stats(message.author.id)
         player = message.author.nick if message.author.nick is not None else message.author.name
         stats_string = f"{player}'s average number of guesses is {round(stats[0], 4)}. They've played {stats[1]} " \
-                       f"games and won {stats[2]} games, making their win rate {round(stats[3] * 100, 4)}%."
+                       f"games and won {stats[2]} games, making their win rate {round(stats[3] * 100, 4)}%. Their " \
+                       f"current win streak is {stats[4]} games and their maximum win streak is {stats[5]} games."
         await message.channel.send(stats_string)
 
     if message.content == "!wb average":

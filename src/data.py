@@ -47,16 +47,62 @@ class Client:
 
         return True
 
-    def get_player_stats(self, pid: int) -> Tuple[float, int, int, float]:
+    def get_player_stats(self, pid: int) -> Tuple[float, int, int, float, int, int]:
         """Return the stats of the player with provided id, given as a tuple in the form
-        (average, count, win_count, win_rate).
+        (average, count, win_count, win_rate, curr_streak, max_streak).
         """
         player = self.db.players.find_one({'_id': pid})
 
         if player is None:
-            return 0.0, 0, 0, 0
+            return 0.0, 0, 0, 0, 0, 0
 
-        return player["average"], player["count"], player["win_count"], player["win_rate"]
+        return (
+            player["average"],
+            player["count"],
+            player["win_count"],
+            player["win_rate"],
+            self.get_current_streak(pid),
+            self.get_max_streak(pid)
+        )
+
+    def get_current_streak(self, pid: int) -> int:
+        """Return the length of the player's current win streak."""
+        player = self.db.players.find_one({'_id': pid})
+
+        if player is None:
+            return 0
+
+        games = list(player['scores'])
+        games.sort(reverse=True)
+        print(games)
+        i = 1
+        previous = int(games[0])
+        while i != len(games) and int(games[i]) == int(previous - 1):
+            previous = int(games[i])
+            i += 1
+        return i
+
+    def get_max_streak(self, pid: int) -> int:
+        """Return the length of the player's maximum win streak."""
+        player = self.db.players.find_one({'_id': pid})
+
+        if player is None:
+            return 0
+
+        games = list(player['scores'])
+        games.sort(reverse=True)
+        max_streak = 0
+        i = 0
+        while i != len(games):
+            curr_streak = 1
+            previous = int(games[i])
+            i += 1
+            while i != len(games) and int(games[i]) == (previous - 1):
+                curr_streak += 1
+                previous = int(games[i])
+                i += 1
+            max_streak = (curr_streak if curr_streak > max_streak else max_streak)
+        return max_streak
 
     def delete_player(self, pid: int) -> bool:
         """Return True iff the player with pid was successfully deleted."""
