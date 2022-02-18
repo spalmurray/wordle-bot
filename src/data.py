@@ -21,6 +21,7 @@ class Client:
         self.wordle_db = self.mongo.wordle
         self.worldle_db = self.mongo.worldle
         self.subwaydle_db = self.mongo.subwaydle
+        self.taylordle_db = self.mongo.taylordle
 
     def get_db_by_game_abbreviation(self, game_abbreviation):
         if game_abbreviation == "wb":
@@ -29,6 +30,8 @@ class Client:
             return self.worldle_db
         elif game_abbreviation == "sb":
             return self.subwaydle_db
+        elif game_abbreviation == "tb":
+            return self.taylordle_db
 
     def add_score(self, game_abbreviation: str, pid: int, wordle: str, score: int) -> bool:
         db = self.get_db_by_game_abbreviation(game_abbreviation)

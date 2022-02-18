@@ -28,6 +28,8 @@ async def on_message(message):
         await process_message("wlb", ":earth_americas: Worldle", "#Worldle #[0-9]+ [1-6|X]/6", message)
     elif message.content.startswith("!sb") or message.content.startswith("Subwaydle"):
         await process_message("sb", ":metro: Subwaydle", "Subwaydle [0-9]+ [1-6|X]/6", message)
+    elif message.content.startswith("!tb") or message.content.startswith("Taylordle"):
+        await process_message("tb", ":notes: Taylordle", "Taylordle [0-9]+ [1-6|X]/6", message)
 
 
 async def process_message(game_abbreviation, game_name, game_regex_string, message):
