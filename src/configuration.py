@@ -7,6 +7,7 @@ class Config:
     def __init__(self):
         config = self.read_config()
         self.token = config.get("wordle-bot", "token")
+        self.testtoken = config.get("wordle-bot", "testtoken")
 
     @staticmethod
     def read_config() -> configparser.ConfigParser:
