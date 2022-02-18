@@ -190,8 +190,14 @@ if __name__ == "__main__":
 
     if len(sys.argv) > 1 and sys.argv[1] == "--test":
         isTest = True
-        client.run(config.testtoken)
+        if config.testtoken == None:
+            print("Set \"testtoken\" value in config.ini to the token value from Discord developer site at https://discord.com/developers/applications/<application id>/bot")
+        else:
+            client.run(config.testtoken)
 
     else:
         isTest = False
-        client.run(config.token)
+        if config.token == None:
+            print("Set \"token\" value in config.ini to the token value from Discord developer site at https://discord.com/developers/applications/<application id>/bot")
+        else:
+            client.run(config.token)

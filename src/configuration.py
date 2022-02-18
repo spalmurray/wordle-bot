@@ -6,8 +6,8 @@ class Config:
 
     def __init__(self):
         config = self.read_config()
-        self.token = config.get("wordle-bot", "token")
-        self.testtoken = config.get("wordle-bot", "testtoken")
+        self.token = config.get("wordle-bot", "token", fallback=None)
+        self.testtoken = config.get("wordle-bot", "testtoken", fallback=None)
 
     @staticmethod
     def read_config() -> configparser.ConfigParser:
@@ -16,7 +16,9 @@ class Config:
         config.read(Config._path)
         if not config.has_section("wordle-bot"):
             with open(Config._path, "w") as file:
-                lines = ["[wordle-bot]\n", "token=enterTokenHere\n"]
+                lines = ["[wordle-bot]\n",
+                         "token=enterTokenHere\n",
+                         "testtoken=enterTokenHere\n"]
                 file.writelines(lines)
             return Config.read_config()
         return config
