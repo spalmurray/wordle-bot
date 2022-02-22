@@ -1,4 +1,5 @@
-from typing import Tuple, List
+import math
+from typing import Tuple
 from pymongo.mongo_client import MongoClient
 
 
@@ -78,13 +79,23 @@ class Client:
 
         scores = player['scores']
         wins = []
-        # remove scores that are not wins
+        most_recent_loss = -math.inf
+
+        # extract winning scores and track most recent loss
         for game in scores:
             if scores[game] != 7:
                 wins.append(int(game))
+            elif int(game) > most_recent_loss:
+                most_recent_loss = int(game)
 
-        # sort these wins and return current streak
+        # sort the wins
         wins.sort(reverse=True)
+
+        # check whether most recent game was a loss
+        if most_recent_loss > wins[0]:
+            return 0
+
+        # return current streak
         i = 1
         previous = int(wins[0])
         while i != len(wins) and int(wins[i]) == int(previous - 1):
