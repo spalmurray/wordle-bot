@@ -41,6 +41,12 @@ async def on_message(message):
     if message.content == "!wb played" or message.content == "!wb games":
         await message.channel.send(rankings_by_games_played(message, 10))
 
+    if message.content == "!wb streak":
+        await message.channel.send(rankings_by_current_win_streak(message, 10))
+
+    if message.content == "!wb maxstreak":
+        await message.channel.send(rankings_by_max_win_streak(message, 10))
+
     if message.content == "!wb deletemydata":
         if database.delete_player(message.author.id):
             await message.channel.send(
@@ -58,6 +64,8 @@ async def on_message(message):
                       "`!wb average` to see server rankings by average number of guesses\n" \
                       "`!wb rate` to see server rankings by win rate\n" \
                       "`!wb played` to see server rankings by games played\n" \
+                      "`!wb streak` to see server rankings by current win streak\n" \
+                      "`!wb maxstreak` to see server rankings by maximum win streak\n" \
                       "`!wb deletemydata` to remove all your scores from wordle-bot (warning: this is not reversible!)"
         await message.channel.send(help_string)
 
@@ -148,6 +156,38 @@ def rankings_by_games_played(message, n: int) -> str:
     i = 0
     while i < n and i != len(scores):
         scoreboard += f"\n{i + 1}. {scores[i][0]} ({scores[i][1][1]})"
+        i += 1
+
+    return scoreboard
+
+
+def rankings_by_current_win_streak(message, n: int) -> str:
+    """Return string formatted leaderboard ordered by the length of current win streak where message is the message data
+    from the triggering Discord message and n is the maximum number of rankings to return.
+    """
+    scores = get_member_scores(message)
+    scores.sort(key=lambda x: x[1][4], reverse=True)
+
+    scoreboard = "Rankings by current win streak:"
+    i=0
+    while i < n and i != len(scores):
+        scoreboard += f"\n{i + 1}. {scores[i][0]} ({scores[i][1][4]})"
+        i += 1
+
+    return scoreboard
+
+
+def rankings_by_max_win_streak(message, n: int) -> str:
+    """Return string formatted leaderboard ordered by the length of maximum win streak where message is the message data
+    from the triggering Discord message and n is the maximum number of rankings to return.
+    """
+    scores = get_member_scores(message)
+    scores.sort(key=lambda x: x[1][5], reverse=True)
+
+    scoreboard = "Rankings by maximum win streak:"
+    i = 0
+    while i < n and i != len(scores):
+        scoreboard += f"\n{i + 1}. {scores[i][0]} ({scores[i][1][5]})"
         i += 1
 
     return scoreboard

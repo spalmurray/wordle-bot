@@ -56,6 +56,10 @@ class Client:
         if player is None:
             return 0.0, 0, 0, 0, 0, 0
 
+        # If performance optimization becomes necessary, remove streak calculations from this.
+        # Additionally, if program complexity grows sufficiently, you may consider making
+        # a Player class to handle stats.
+
         return (
             player["average"],
             player["count"],
@@ -74,7 +78,6 @@ class Client:
 
         scores = player['scores']
         wins = []
-        print(scores)
         # remove scores that are not wins
         for game in scores:
             if scores[game] != 7:
@@ -82,7 +85,6 @@ class Client:
 
         # sort these wins and return current streak
         wins.sort(reverse=True)
-        print(wins)
         i = 1
         previous = int(wins[0])
         while i != len(wins) and int(wins[i]) == int(previous - 1):
@@ -99,7 +101,6 @@ class Client:
 
         scores = player['scores']
         wins = []
-        print(scores)
         # remove scores that are not wins
         for game in scores:
             if scores[game] != 7:
