@@ -3,8 +3,6 @@ A Discord bot to track you and your friends' Wordle scores, so you can see who's
 
 To add the bot to your Discord server, click [here](https://discord.com/api/oauth2/authorize?client_id=933891782373158943&permissions=67584&scope=bot)!
 
-Feb 3 Update: The bot has reached 100 servers and cannot be added to any more until Discord verifies the bot. The process has been started, but may take some time. I'm sorry for the inconvenience and hope you'll come back to check in! I will keep this note updated with any news. :)
-
 ---
 
 Bot commands are as follows:
