@@ -2,6 +2,7 @@ import configuration
 import data
 import discord
 import re
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 intents = discord.Intents.default()
 intents.members = True
@@ -99,6 +100,10 @@ async def on_message(message):
         else:
             await message.channel.send("I will pretend like I didn't see that one...")
 
+    if message.content == "!wb ADMIN_DB_UPDATE":
+        # Temporary admin command for updating the database schema
+        database.update_schema()
+
 
 def get_member_scores(message) -> list:
     """Return a list of tuples containing member names and their scores."""
@@ -169,7 +174,7 @@ def rankings_by_current_win_streak(message, n: int) -> str:
     scores.sort(key=lambda x: x[1][4], reverse=True)
 
     scoreboard = "Rankings by current win streak:"
-    i=0
+    i = 0
     while i < n and i != len(scores):
         scoreboard += f"\n{i + 1}. {scores[i][0]} ({scores[i][1][4]})"
         i += 1
@@ -191,6 +196,40 @@ def rankings_by_max_win_streak(message, n: int) -> str:
         i += 1
 
     return scoreboard
+
+
+async def run_player_checks() -> None:
+    """Check whether each player has reached or is nearing the 30-day data deletion period and notify the user of the
+    relevant information through a DM. If the user is inaccessible through a Discord DM (this happens in the case that
+    a user shares no common guild with the bot), then continue as if the user had been notified.
+
+    This is only required for access to Discord's privileged intents, so if you are not using this bot on more than 100
+    servers, you can delete this function!
+
+    User data will be deleted after 30 days of inactivity.
+    """
+    print("running checks")
+    # Get a list of users ids who have not submitted a score in the last 15-29 days:
+    nearing_expiry = database.get_nearing_expiry()
+    for player in nearing_expiry:
+        user = client.get_user(player[0])
+        await user.send(f"Hey {user.name}! You haven't submitted a score in {player[1]} days. All of your wordle-bot "
+                        f"scores will be permanently deleted after 30 days of inactivity. Please submit a score in the "
+                        f"next {29 - player[1]} days if you wish to keep your score data!")
+
+    # Get a list of user ids who have not submitted a score in the last 30 days:
+    expired = database.get_expired()
+    for player in expired:
+        user = client.get_user(player)
+        await user.send(f"Hi {user.name}! Unfortunately, since you haven't submitted a new score in the last 30 days, "
+                        f"I have deleted your score data from my database in accordance with Discord's user privacy "
+                        f"rules. I'll be here if you ever want to start fresh! :)")
+
+
+# Start up the scheduled player checks to run every 5 days
+scheduler = AsyncIOScheduler()
+scheduler.add_job(run_player_checks, 'interval', days=5)
+scheduler.start()
 
 
 if __name__ == "__main__":

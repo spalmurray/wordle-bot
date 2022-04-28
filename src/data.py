@@ -1,5 +1,6 @@
 import math
-from typing import Tuple
+from typing import Tuple, List
+from datetime import datetime, timedelta
 from pymongo.mongo_client import MongoClient
 
 
@@ -35,7 +36,8 @@ class Client:
                 "count": 0,
                 "win_count": 0,
                 "average": 0,
-                "win_rate": 0
+                "win_rate": 0,
+                "last_updated": datetime.now()
             }
 
         player["scores"][wordle] = score
@@ -43,6 +45,7 @@ class Client:
         player["win_count"] = player["win_count"] if score == 7 else player["win_count"] + 1
         player["average"] = player["average"] + (score - player["average"]) / (player["count"])
         player["win_rate"] = player["win_count"] / player["count"]
+        player["last_updated"]: datetime.now()
 
         self.db.players.replace_one({"_id": pid}, player, True)
 
@@ -138,3 +141,48 @@ class Client:
         if result.deleted_count != 0:
             return True
         return False
+
+    def get_nearing_expiry(self) -> List[Tuple[int, int]]:
+        """Return a list containing a tuple for each user who has not submitted a score in the last 15-29 days. Each
+        tuple is of the form (Discord user id, days since last submitted score).
+        """
+        nearing_expiry = []
+        cursor = self.db.players.find({})
+
+        for player in cursor:
+            if timedelta(days=15) < (datetime.now() - player["last_updated"]) < timedelta(days=30):
+                nearing_expiry.append((player["_id"], (datetime.now() - player["last_updated"]).days))
+
+        return nearing_expiry
+
+    def get_expired(self) -> List[int]:
+        """Return a list of user ids for each user who has not submitted a score in the last 30 days."""
+        expired = []
+        cursor = self.db.players.find({})
+
+        for player in cursor:
+            if timedelta(days=30) < (datetime.now() - player["last_updated"]):
+                expired.append(player["_id"])
+                self.delete_player(player["_id"])
+
+        return expired
+
+    def update_schema(self) -> None:
+        """Perform some update on the database. This is a temporary utility method."""
+        cursor = self.db.players.find({})
+        print("Updating database...")
+        i = 0
+        for player in cursor:
+            new_player = {
+                "_id": player["_id"],
+                "scores": player["scores"],
+                "count": player["count"],
+                "win_count": player["win_count"],
+                "average": player["average"],
+                "win_rate": player["win_rate"],
+                "last_updated": datetime.now()
+            }
+            self.db.players.replace_one({"_id": player["_id"]}, new_player, True)
+            i += 1
+        print(f"Updated {i} documents!")
+        return None
