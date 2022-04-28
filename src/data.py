@@ -166,23 +166,3 @@ class Client:
                 self.delete_player(player["_id"])
 
         return expired
-
-    def update_schema(self) -> None:
-        """Perform some update on the database. This is a temporary utility method."""
-        cursor = self.db.players.find({})
-        print("Updating database...")
-        i = 0
-        for player in cursor:
-            new_player = {
-                "_id": player["_id"],
-                "scores": player["scores"],
-                "count": player["count"],
-                "win_count": player["win_count"],
-                "average": player["average"],
-                "win_rate": player["win_rate"],
-                "last_updated": datetime.now()
-            }
-            self.db.players.replace_one({"_id": player["_id"]}, new_player, True)
-            i += 1
-        print(f"Updated {i} documents!")
-        return None

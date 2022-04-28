@@ -100,10 +100,6 @@ async def on_message(message):
         else:
             await message.channel.send("I will pretend like I didn't see that one...")
 
-    if message.content == "!wb ADMIN_DB_UPDATE":
-        # Temporary admin command for updating the database schema
-        database.update_schema()
-
 
 def get_member_scores(message) -> list:
     """Return a list of tuples containing member names and their scores."""
