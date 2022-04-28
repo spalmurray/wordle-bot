@@ -204,7 +204,6 @@ async def run_player_checks() -> None:
 
     User data will be deleted after 30 days of inactivity.
     """
-    print("running checks")
     # Get a list of users ids who have not submitted a score in the last 15-29 days:
     nearing_expiry = database.get_nearing_expiry()
     for player in nearing_expiry:
