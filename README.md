@@ -11,7 +11,10 @@ Bot commands are as follows:
 - `!wb me` to see your stats
 - `!wb average` to see server rankings by average number of guesses
 - `!wb rate` to see server rankings by win rate
-- `!wb games` to see server rankings by games played
+- `!wb played` to see server rankings by games played
+- `!wb streak` to see server rankings by current win streak
+- `!wb maxstreak` to see server rankings by maximum win streak
+- `!wb missing` to see which Wordles you have not submitted a score for
 - `!wb deletemydata` to remove all your scores from wordle-bot (warning: this is not reversible!)
 
 ---
