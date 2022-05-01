@@ -135,6 +135,32 @@ class Client:
             max_streak = (curr_streak if curr_streak > max_streak else max_streak)
         return max_streak
 
+    def get_missing_scores(self, pid: int) -> List[int]:
+        """Return a list of Wordle game numbers that user with pid has not submitted to wordle-bot which are after the
+        player's lowest game number submission and before the player's highest game number submission.
+        """
+        player = self.db.players.find_one({'_id': pid})
+
+        if player is None:
+            return []
+
+        # get the player's submitted game numbers and sort them in non-decreasing order
+        games = sorted(player['scores'], key=lambda y: int(y))
+
+        # we'll accumulate the missing scores here.
+        missing = []
+
+        # iterate through the list of games adding missing numbers to the missing list as we go
+        prev = int(games[0])
+        for game in games[1:]:
+            game = int(game)
+            if game != prev + 1:
+                for x in range(prev + 1, game):
+                    missing.append(x)
+            prev = game
+
+        return missing
+
     def delete_player(self, pid: int) -> bool:
         """Return True iff the player with pid was successfully deleted."""
         result = self.db.players.delete_one({"_id": pid})
