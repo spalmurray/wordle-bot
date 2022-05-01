@@ -50,7 +50,7 @@ async def on_message(message):
 
     if message.content == "!wb missing":
         missing = database.get_missing_scores(message.author.id)
-        player = message.author.nuck if message.author.nick is not None else message.author.name
+        player = message.author.nick if message.author.nick is not None else message.author.name
         if not missing:
             await message.channel.send(f"{player} is not missing any Wordle games!")
         else:
