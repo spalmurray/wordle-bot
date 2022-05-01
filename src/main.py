@@ -54,7 +54,7 @@ async def on_message(message):
         if not missing:
             await message.channel.send(f"{player} is not missing any Wordle games!")
         else:
-            missing_string = f"{player} is missing the following Wordle games: "
+            missing_string = f"{player} is missing Wordle games: "
             for game in missing:
                 missing_string += str(game) + ", "
             missing_string = missing_string[:-2] + "."
