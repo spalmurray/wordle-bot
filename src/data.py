@@ -45,7 +45,7 @@ class Client:
         player["win_count"] = player["win_count"] if score == 7 else player["win_count"] + 1
         player["average"] = player["average"] + (score - player["average"]) / (player["count"])
         player["win_rate"] = player["win_count"] / player["count"]
-        player["last_updated"]: datetime.now()
+        player["last_updated"] = datetime.now()
 
         self.db.players.replace_one({"_id": pid}, player, True)
 
