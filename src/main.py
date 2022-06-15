@@ -224,9 +224,6 @@ async def run_player_checks() -> None:
         await user.send(f"Hey {user.name}! You haven't submitted a score in {player[1]} days. All of your wordle-bot "
                         f"scores will be permanently deleted after 30 days of inactivity. Please submit a score in the "
                         f"next {29 - player[1]} days if you wish to keep your score data!")
-        await user.send("I'm sorry for the scare that happened on May 26th, if you got a message from me then. There "
-                        "was a bug with the new data retention rules. I reset everyone's timer to May 26th and the "
-                        "system should work properly now. Thank you for hopefully understanding! :)")
 
     # Get a list of user ids who have not submitted a score in the last 30 days:
     expired = database.get_expired()
