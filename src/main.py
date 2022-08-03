@@ -22,9 +22,6 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if message.content == "!wb members":
-        await message.channel.send(message.guild.members)
-
     if message.content == "!wb me":
         stats = database.get_player_stats(message.author.id)
         player = message.author.nick if message.author.nick is not None else message.author.name
