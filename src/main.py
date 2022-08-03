@@ -241,5 +241,6 @@ scheduler.start()
 
 
 if __name__ == "__main__":
+    print("Starting wordle-bot!")
     config = configuration.Config()
     client.run(config.token)

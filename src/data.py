@@ -177,7 +177,7 @@ class Client:
 
         for player in cursor:
             if timedelta(days=15) < (datetime.now() - player["last_updated"]) < timedelta(days=30):
-                nearing_expiry.append((player["_id"], (datetime.now() - player["last_updated"]).days))
+                nearing_expiry.append((int(player["_id"]), (datetime.now() - player["last_updated"]).days))
 
         return nearing_expiry
 
@@ -188,7 +188,7 @@ class Client:
 
         for player in cursor:
             if timedelta(days=30) < (datetime.now() - player["last_updated"]):
-                expired.append(player["_id"])
-                self.delete_player(player["_id"])
+                expired.append(int(player["_id"]))
+                self.delete_player(int(player["_id"]))        
 
         return expired
