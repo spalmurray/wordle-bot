@@ -1,16 +1,18 @@
 import configuration
 import data
 import discord
+from discord.ext import commands
 import re
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 intents = discord.Intents.default()
 intents.members = True
 intents.messages = True
-client = discord.Client(intents=intents)
+intents.message_content = True
+
+client = commands.Bot(command_prefix="!", intents=intents)
 
 database = data.Client()
-
 
 @client.event
 async def on_ready():
