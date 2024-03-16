@@ -82,7 +82,7 @@ async def on_message(message):
                       "`!wb deletemydata` to remove all your scores from wordle-bot (warning: this is not reversible!)"
         await message.channel.send(help_string)
 
-    if re.match(r"Wordle [0-9]+ [1-6|X]/6", message.content) is not None:
+    if re.match(r"Wordle \d{1,3}(,\d{3})* [1-6|X]/6", message.content) is not None:
         # extract the Wordle number from message
         wordle = message.content.splitlines()[0].split(" ")[1]
         # extract the score from message
